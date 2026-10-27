@@ -395,6 +395,9 @@ footer a{text-decoration:none}footer a:hover{color:var(--fg)}
 .bk-priv button{all:unset;cursor:pointer;color:var(--accent);text-decoration:underline}
 
 .vp iframe{z-index:3}
+.cursor,.cursor-dot{transition:opacity .25s}
+body.cur-off .cursor,body.cur-off .cursor-dot{opacity:0}
+body.has-cursor .vp,body.has-cursor .vp *{cursor:auto}
 
 </style>
 </head>
@@ -893,6 +896,10 @@ if (fine) {
   document.body.classList.add('has-cursor');
   let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
   addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; d.style.transform = `translate(${x}px,${y}px)`; });
+  document.querySelectorAll('.vp').forEach(vp => {   // live sites inside the screens swallow the mouse: hide our cursor there
+    vp.addEventListener('mouseenter', () => document.body.classList.add('cur-off'));
+    vp.addEventListener('mouseleave', () => document.body.classList.remove('cur-off'));
+  });
   (function loop() { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; c.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); })();
   document.querySelectorAll('.magnet').forEach(b => {
     b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect();
