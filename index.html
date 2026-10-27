@@ -398,6 +398,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--fg)}
 .cursor,.cursor-dot{transition:opacity .25s}
 body.cur-off .cursor,body.cur-off .cursor-dot{opacity:0}
 body.has-cursor .vp,body.has-cursor .vp *{cursor:auto}
+html{-webkit-tap-highlight-color:transparent}
 
 </style>
 </head>
@@ -598,6 +599,14 @@ const CONFIG = {
 };
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// phones: a finger "hovers" whatever it touched while scrolling and the effect sticks, so drop hover styles there
+if (matchMedia('(hover: none)').matches) {
+  for (const sh of document.styleSheets) { let rules; try { rules = sh.cssRules; } catch (e) { continue; }
+    const strip = list => { for (let i = list.length - 1; i >= 0; i--) { const r = list[i];
+      if (r.selectorText && r.selectorText.includes(':hover')) list === rules ? sh.deleteRule(i) : r.parentRule.deleteRule(i);
+      else if (r.cssRules) strip(r.cssRules); } };
+    strip(rules); }
+}
 const $ = s => document.querySelector(s);
 const LANGS = ['uk', 'en', 'de'];
 let lang = 'uk';
