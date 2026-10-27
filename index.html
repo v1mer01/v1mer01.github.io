@@ -939,8 +939,9 @@ if (fine) {
     if (run && !reduce) requestAnimationFrame(draw);
   };
   size(); addEventListener('resize', size);
-  cv.parentElement.addEventListener('mousemove', e => { const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
-  cv.parentElement.addEventListener('mouseleave', () => { mx = my = -999; });
+  cv.parentElement.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') { mx = my = -999; return; } const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+  cv.parentElement.addEventListener('pointerleave', () => { mx = my = -999; });
+  ['pointerdown', 'touchstart', 'scroll'].forEach(ev => addEventListener(ev, e => { if (!e.pointerType || e.pointerType !== 'mouse') { mx = my = -999; } }, { passive: true }));
   new IntersectionObserver(([e]) => { const was = run; run = e.isIntersecting; if (run && !was) requestAnimationFrame(draw); }).observe(cv);
   requestAnimationFrame(draw);
   matchMedia('(prefers-color-scheme: light)').addEventListener('change', size);
