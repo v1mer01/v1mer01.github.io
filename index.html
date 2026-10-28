@@ -433,7 +433,7 @@ html{-webkit-tap-highlight-color:transparent}
           <a class="btn btn-ghost magnet" href="#works" data-i="hero.cta2">Дивитися роботи</a>
         </div>
         <div class="proofs">
-          <div><b data-count="7">7</b><span data-i="proof1">сайтів у портфоліо</span></div>
+          <div><b data-count="8">8</b><span data-i="proof1">сайтів у портфоліо</span></div>
           <div><b data-i="proof2v">3 дні</b><span data-i="proof2">до першої версії</span></div>
           <div><b>100%</b><span data-i="proof3">зручно з телефона</span></div>
         </div>
@@ -462,7 +462,7 @@ html{-webkit-tap-highlight-color:transparent}
       <div class="sec-head rv">
         <h2><small class="eyebrow" data-i="works.eyebrow">Портфоліо</small><span data-i="works.title">Роботи</span></h2>
         <p data-i="works.lead">Кожен сайт зроблений під конкретний бізнес.</p>
-        <span class="count" aria-hidden="true">07</span>
+        <span class="count" aria-hidden="true">08</span>
       </div>
       <div class="works">
         <div class="plist" id="plist" role="tablist"></div>
@@ -634,7 +634,7 @@ const I = {
   'works.lead': ['Кожен сайт зроблений під конкретний бізнес: його стиль, його клієнтів, його спосіб запису. Наведіть на екран, щоб прогорнути сторінку, або відкрийте сайт наживо.',
     'Every site is made for one specific business: its style, its clients, its way of taking bookings. Hover over the screen to scroll the page, or open the live site.',
     'Jede Website entsteht für ein bestimmtes Unternehmen: seinen Stil, seine Kunden, seine Art der Terminbuchung. Fahren Sie über den Bildschirm, um zu scrollen, oder öffnen Sie die Live-Seite.'],
-  'w.concept': ['Концепт', 'Concept', 'Konzept'], 'w.open': ['Відкрити сайт', 'Open the site', 'Website öffnen'],
+  'w.concept': ['Концепт', 'Concept', 'Konzept'], 'w.client': ['Реальний клієнт', 'Client project', 'Kundenprojekt'], 'w.open': ['Відкрити сайт', 'Open the site', 'Website öffnen'],
   'w.resp': ['Адаптив', 'Responsive', 'Responsive'], 'w.anim': ['Анімації', 'Animations', 'Animationen'],
   'svc.eyebrow': ['Послуги', 'Services', 'Leistungen'], 'svc.title': ['Що я роблю', 'What I do', 'Was ich mache'],
   'svc.lead': ['Від однієї сторінки, яка продає, до повноцінного сайту з онлайн-записом. Дизайн, тексти, анімації та запуск беру на себе.',
@@ -839,7 +839,7 @@ const SCENES = [
 ];
 const BMENU = ['Послуги · Ціни · Контакти', 'Services · Prices · Contact', 'Leistungen · Preise · Kontakt'];
 const BBTN = ['Записатися онлайн', 'Book online', 'Online buchen'];
-const TYPES = { barber: ['Барбершоп', 'Barbershop', 'Barbershop'], salon: ['Салон краси', 'Beauty salon', 'Kosmetikstudio'], nails: ['Манікюрний салон', 'Nail studio', 'Nagelstudio'],
+const TYPES = { master: ['Nail-майстер', 'Nail artist', 'Nageldesignerin'], barber: ['Барбершоп', 'Barbershop', 'Barbershop'], salon: ['Салон краси', 'Beauty salon', 'Kosmetikstudio'], nails: ['Манікюрний салон', 'Nail studio', 'Nagelstudio'],
   brows: ['Брови та вії', 'Brows & lashes', 'Brauen & Wimpern'], mua: ['Візажистка', 'Make-up artist', 'Visagistin'] };
 const TAGS = { services: ['Послуги', 'Services', 'Leistungen'], team: ['Команда', 'Team', 'Team'], booking: ['Онлайн-запис', 'Online booking', 'Online-Buchung'], map: ['Карта', 'Map', 'Karte'],
   two: ['2 локації', '2 locations', '2 Standorte'], podo: ['Подологія', 'Podology', 'Podologie'], faq: ['FAQ', 'FAQ', 'FAQ'], prices: ['Прайс', 'Price list', 'Preisliste'],
@@ -1052,6 +1052,8 @@ document.querySelectorAll('[data-count]').forEach(el => {
 
 /* ---------- portfolio ---------- */
 const P = [
+  { slug: 'sabina', name: 'Sabina nails', type: 'master', client: true, place: ['бул. Слави', 'Slavy Blvd.', 'Slavy-Boulevard'], bg: '#171216', fg: '#f6eef1', ac: '#ff6fae', ink: '#2a0c1a', font: '"Playfair Display",serif', w: 700, cs: 'none', st: 'italic', size: '5.2cqw',
+    h1: 'Манікюр, яким хочеться милуватися', p: 'Nail-майстер Сабіна. Манікюр, педикюр, нарощування та індивідуальне навчання.', btn: 'Записатися', tags: ['prices', 'learn', 'booking', 'map'] },
   { slug: 'bladeroom', name: 'BLADE ROOM', type: 'barber', place: ['вул. Калинова', 'Kalynova St.', 'Kalynova-Str.'], bg: '#0c0c0b', fg: '#f3f2ee', ac: '#aaa33f', ink: '#0c0c0b', font: '"Montserrat",sans-serif', w: 900, cs: 'uppercase', st: 'normal', size: '5cqw',
     h1: 'Стрижки та гоління', p: 'Чоловічі стрижки, борода і догляд у центрі району. Запис онлайн за хвилину.', btn: 'Записатися', tags: ['services', 'team', 'booking', 'map'] },
   { slug: 'koko', name: 'KOKO lux', type: 'salon', place: ['дві локації', 'two locations', 'zwei Standorte'], bg: '#0f0f0f', fg: '#f5f3ee', ac: '#f6d70b', ink: '#0f0f0f', font: '"Marcellus",serif', w: 400, cs: 'none', st: 'normal', size: '7cqw',
@@ -1115,7 +1117,7 @@ function showProject(i, focus) {
     });
     fitFrames();
   }
-  info.innerHTML = `<div><span class="concept">${t('w.concept')}</span><h3 style="margin-top:10px">${p.name}</h3><div class="meta">${TYPES[p.type][L()]} · ${p.place[L()]}</div></div>
+  info.innerHTML = `<div><span class="concept">${t(p.client ? 'w.client' : 'w.concept')}</span><h3 style="margin-top:10px">${p.name}</h3><div class="meta">${TYPES[p.type][L()]} · ${p.place[L()]}</div></div>
     <div class="tags">${[t('w.resp'), t('w.anim'), ...p.tags.map(x => TAGS[x][L()])].map(x => `<span>${x}</span>`).join('')}</div>
     <a class="btn btn-primary" href="${url}" target="_blank" rel="noopener">${t('w.open')} <span class="arr">↗</span></a>`;
   hoverables();
