@@ -399,6 +399,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--fg)}
 body.cur-off .cursor,body.cur-off .cursor-dot{opacity:0}
 body.has-cursor .vp,body.has-cursor .vp *{cursor:auto}
 html{-webkit-tap-highlight-color:transparent}
+.price .sum.txt{font-size:clamp(24px,2.4vw,34px);overflow-wrap:anywhere}
 
 </style>
 </head>
@@ -797,9 +798,17 @@ const MARQUEE = [
 const SERVICES = [['Лендінг', 'Landing page', 'Landingpage'], ['Сайт для бізнесу', 'Business website', 'Unternehmenswebsite'], ['Редизайн', 'Redesign', 'Redesign']];
 const PLANS = [
   { n: ['Старт', 'Start', 'Start'], sum: ['від 3 000 ₴', 'from €70', 'ab 70 €'], svc: 0,
-    f: [['Лендінг: одна сторінка', 'Landing page: one page', 'Landingpage: eine Seite'], ['Анімації та мобільна версія', 'Animation and mobile version', 'Animationen und mobile Version'], ['Ваші фото та тексти', 'Your photos and copy', 'Ihre Fotos und Texte'], ['Підключення домену', 'Domain setup', 'Domain-Einrichtung'], ['2 раунди правок', '2 rounds of revisions', '2 Korrekturrunden']] },
+    f: [['Сайт-лендінг під ваш бізнес, як у портфоліо', 'A landing page for your business, like the ones in my portfolio', 'Landingpage für Ihr Unternehmen, wie im Portfolio'],
+      ['Послуги, ціни, роботи, контакти, карта', 'Services, prices, your work, contacts, map', 'Leistungen, Preise, Arbeiten, Kontakt, Karte'],
+      ['Мобільна версія та плавні анімації', 'Mobile version and smooth animations', 'Mobile Version und sanfte Animationen'],
+      ['Кнопки запису: телефон, Instagram, Telegram', 'Booking buttons: phone, Instagram, Telegram', 'Buchungsbuttons: Telefon, Instagram, Telegram'],
+      ['Публікація сайту і 2 раунди правок', 'Publishing and 2 rounds of revisions', 'Veröffentlichung und 2 Korrekturrunden']] },
   { n: ['Бізнес', 'Business', 'Business'], sum: ['від 7 000 ₴', 'from €160', 'ab 160 €'], svc: 1, feat: true,
-    f: [['Усе зі «Старту»', 'Everything in Start', 'Alles aus Start'], ['До 5 сторінок', 'Up to 5 pages', 'Bis zu 5 Seiten'], ['Онлайн-запис і карта', 'Online booking and map', 'Online-Buchung und Karte'], ['Галерея та відгуки', 'Gallery and reviews', 'Galerie und Bewertungen'], ['Налаштування для Google', 'Set up for Google', 'Einrichtung für Google']] },
+    f: [['Преміальний дизайн рівня цього сайту', 'Premium design on the level of this site', 'Premium-Design auf dem Niveau dieser Website'],
+      ['Ефектні анімації та інтерактив', 'Eye-catching animation and interactive elements', 'Auffällige Animationen und interaktive Elemente'],
+      ['Онлайн-запис із формою, заявки на пошту', 'Online booking form, requests to your e-mail', 'Online-Buchung mit Formular, Anfragen per E-Mail'],
+      ['Кілька мов на вибір', 'Several languages', 'Mehrere Sprachen'],
+      ['Усе зі «Старту»', 'Everything in Start', 'Alles aus Start']] },
   { n: ['Преміум', 'Premium', 'Premium'], sum: ['Індивідуально', 'Custom quote', 'Individuell'], svc: 3,
     f: [['Унікальний дизайн з нуля', 'Unique design from scratch', 'Einzigartiges Design von Grund auf'], ['Складні анімації та ефекти', 'Advanced animation and effects', 'Aufwendige Animationen und Effekte'], ['Інтеграції: CRM, оплата, розсилки', 'Integrations: CRM, payments, newsletters', 'Integrationen: CRM, Zahlung, Newsletter'], ['Пріоритетна підтримка', 'Priority support', 'Bevorzugter Support']] },
 ];
@@ -860,7 +869,7 @@ function applyLang() {
   const mq = MARQUEE[L()]; $('#mq').innerHTML = [...mq, ...mq].map(x => `<span>${x}</span>`).join('');
   // prices
   $('#priceCards').innerHTML = PLANS.map((p, i) => `<div class="price${p.feat ? ' feat' : ''}">${p.feat ? `<span class="badge">${t('pc.popular')}</span>` : ''}
-    <h3>${p.n[L()]}</h3><div class="sum">${p.sum[L()]}</div>
+    <h3>${p.n[L()]}</h3><div class="sum${/\d/.test(p.sum[L()]) ? '' : ' txt'}">${p.sum[L()]}</div>
     <ul>${p.f.map(f => `<li><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10l4 4 8-8"/></svg>${f[L()]}</li>`).join('')}</ul>
     <a class="btn ${p.feat ? 'btn-primary' : 'btn-ghost'}" href="#contact" data-plan="${i}">${i === 2 ? t('pc.talk') : t('pc.choose')}${p.feat ? ' <span class="arr">→</span>' : ''}</a></div>`).join('');
   document.querySelectorAll('[data-plan]').forEach(a => a.addEventListener('click', () => { BK.service = PLANS[+a.dataset.plan].svc; BK.step = 0; renderBook(); }));
