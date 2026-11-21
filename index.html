@@ -7,8 +7,8 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="V1MER — веб-студія з Дніпра. Сайти для барбершопів, салонів краси та малого бізнесу: швидкі, анімовані, з онлайн-записом.">
 <script>
-(function(){var d=document.documentElement;try{var th=localStorage.getItem('v1mer-theme');if(th==='light'||th==='dark')d.setAttribute('data-theme',th);}catch(e){}
-try{if(false&&!sessionStorage.getItem('v1mer-intro')){d.classList.add('intro');}}catch(e){}})();
+(function(){var d=document.documentElement;try{if((navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=4)d.classList.add('weak');}catch(e){}try{var th=localStorage.getItem('v1mer-theme');if(th==='light'||th==='dark')d.setAttribute('data-theme',th);}catch(e){}
+try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('v1mer-intro')){d.classList.add('intro');}}catch(e){}})();
 </script>
 <style>
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/jetbrains-mono-v24-cyrillic_latin-600.woff2') format('woff2')}
@@ -506,20 +506,11 @@ h3,.price .sum.txt,.bento .big{overflow-wrap:break-word;hyphens:auto;-webkit-hyp
   .tilt-card.tilt-on{transform:none!important}
 }
 
-/* ===== LITE MODE: lighter animations for weak PCs (prices/content unchanged) ===== */
-*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}
-.aurora,.cursor,.cursor-dot,.intro-ov{display:none!important}
-header.top{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}
-*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;will-change:auto!important}
-.builder,.builder:hover{transform:none!important}
-.tilt-card,.tilt-card.tilt-on{transform:none!important}
-.rv.pre{transform:none!important;opacity:1!important}
-.sw>span{transform:none!important;transition:none!important}
-.hero h1 .w>span{transform:none!important}
-.hero h1 em path{stroke-dashoffset:0!important}
-.hero h1 em{background:none!important;color:var(--accent)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important}
-.price.feat{animation:spin 4s linear infinite!important}
-.marquee .track{animation:mq 38s linear infinite!important}
+/* perf tweaks: same look, cheaper to render */
+header.top{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg) 93%,transparent)}
+.hero,.contact{contain:paint}
+html.weak .aurora{display:none}
+html.weak .builder{transform:none}
 </style>
 </head>
 <body>
@@ -725,7 +716,7 @@ const CONFIG = {
   },
 };
 
-const reduce = true; // lite mode
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // phones: a finger "hovers" whatever it touched while scrolling and the effect sticks, so drop hover styles there
 if (matchMedia('(hover: none)').matches) {
   for (const sh of document.styleSheets) { let rules; try { rules = sh.cssRules; } catch (e) { continue; }
@@ -1039,6 +1030,8 @@ const hoverables = () => document.querySelectorAll('a,button,.pbtn,summary,.devi
 if (fine) {
   document.body.classList.add('has-cursor');
   let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
+  let raf = 0; const tick = () => { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; c.style.transform = `translate(${cx}px,${cy}px)`; raf = (Math.abs(x - cx) > 0.1 || Math.abs(y - cy) > 0.1) ? requestAnimationFrame(tick) : 0; };
+  addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; d.style.transform = `translate(${x}px,${y}px)`; if (!raf) raf = requestAnimationFrame(tick); });
   document.querySelectorAll('.vp').forEach(vp => {   // live sites inside the screens swallow the mouse: hide our cursor there
     vp.addEventListener('mouseenter', () => document.body.classList.add('cur-off'));
     vp.addEventListener('mouseleave', () => document.body.classList.remove('cur-off'));
@@ -1059,7 +1052,9 @@ if (fine) {
     const g = W < 600 ? 26 : 32; for (let yy = g / 2; yy < H; yy += g) for (let xx = g / 2; xx < W; xx += g) pts.push([xx, yy]);
     const cs = getComputedStyle(document.documentElement); accent = cs.getPropertyValue('--accent').trim() || '#ffb43d'; muted = cs.getPropertyValue('--line').trim() || '#222a3b';
   };
+  let last = 0; const weak = document.documentElement.classList.contains('weak');
   const draw = tm => {
+    if (tm - last < 33 && last) { if (run && !reduce && !weak) requestAnimationFrame(draw); return; } last = tm;
     ctx.clearRect(0, 0, W, H);
     for (const [px, py] of pts) {
       const dx = px - mx, dy = py - my, dist = Math.hypot(dx, dy), k = Math.max(0, 1 - dist / 170);
@@ -1069,7 +1064,7 @@ if (fine) {
       ctx.beginPath(); ctx.arc(px + ox, py + oy + wave, 1.1 + k * 2.2, 0, 6.283); ctx.fill();
     }
     ctx.globalAlpha = 1;
-    if (run && !reduce) requestAnimationFrame(draw);
+    if (run && !reduce && !weak) requestAnimationFrame(draw);
   };
   size(); addEventListener('resize', size);
   cv.parentElement.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') { mx = my = -999; return; } const r = cv.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
@@ -1187,7 +1182,7 @@ const P = [
   { slug: 'lezo', name: 'Лезо', type: 'barber', place: ['концепт бренду', 'brand concept', 'Markenkonzept'], bg: '#eef0eb', fg: '#14211e', ac: '#9a6f22', ink: '#ffffff', font: '"Alumni Sans",sans-serif', w: 800, cs: 'uppercase', st: 'normal', size: '6.6cqw',
     h1: 'Стрижка, після якої не треба укладки', p: 'Три майстри, гоління небезпечною бритвою і кава, поки чекаєте. Щодня з 9:00 до 21:00.', btn: 'Записатися', tags: ['prices', 'masters', 'reviews', 'booking'] },
 ];
-const LIVE = false; // lite: static previews instead of heavy live iframes   // on your own site: real pages inside the frames
+const LIVE = window.self === window.top && /^https?:$/.test(location.protocol) && !document.documentElement.classList.contains('weak');   // on your own site: real pages inside the frames
 const PRICES = ['від 450 ₴', 'від 350 ₴', 'від 600 ₴', 'від 300 ₴'];
 const UKT = { services: 'Послуги', team: 'Команда', booking: 'Онлайн-запис', map: 'Карта', two: '2 локації', podo: 'Подологія', faq: 'FAQ', prices: 'Прайс', reviews: 'Відгуки', combos: 'Комплекси', learn: 'Навчання', makeup: 'Макіяж', brows: 'Брови', masters: 'Майстри' };
 const poster = p => `
@@ -1201,6 +1196,7 @@ const poster = p => `
       <div class="pv-foot">${p.name} · ${p.place[0]} · Дніпро</div>
     </div>
   </div>`;
+let stageSeen = false;
 const list = $('#plist'), vpD = $('#vpDesk'), vpP = $('#vpPhone'), info = $('#pinfo'), dev = $('#devices');
 let cur = 0, shownSlug = '';
 P.forEach((p, i) => {
@@ -1228,7 +1224,7 @@ function showProject(i, focus) {
     [[vpD, 1280], [vpP, 390]].forEach(([vp, w]) => {
       vp.innerHTML = poster(p);
       vp.firstElementChild.animate([{ opacity: 0, transform: 'scale(1.03)' }, { opacity: 1, transform: 'none' }], { duration: reduce ? 1 : 500, easing: 'cubic-bezier(.2,.8,.2,1)' });
-      if (LIVE) {
+      if (LIVE && stageSeen) {
         const f = document.createElement('iframe'); f.src = url; f.loading = 'lazy'; f.title = p.name; f.tabIndex = -1; f.style.width = w + 'px';
         f.addEventListener('load', () => { f.classList.add('ready'); const pv = vp.querySelector('.pv'); if (pv) setTimeout(() => pv.remove(), 500); }); vp.append(f);
       }
@@ -1241,6 +1237,7 @@ function showProject(i, focus) {
   hoverables();
 }
 addEventListener('resize', fitFrames);
+if (LIVE && 'IntersectionObserver' in window) { const sio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { sio.disconnect(); stageSeen = true; shownSlug = ''; showProject(cur); } }, { rootMargin: '300px' }); sio.observe($('#stage')); }
 if (!reduce) {
   const st = $('#stage');
   st.addEventListener('mousemove', e => { const r = st.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
@@ -1458,7 +1455,8 @@ const onScroll2 = () => {
   const r = big.getBoundingClientRect(), s0 = h.scrollTop + r.top - innerHeight, k = s0 >= max ? 1 : Math.min(1, Math.max(0, (h.scrollTop - s0) / (max - s0)));
   big.style.setProperty('--fill', (k * 100).toFixed(1) + '%');
 };
-addEventListener('scroll', onScroll2, { passive: true }); addEventListener('resize', onScroll2); onScroll2();
+let sq = 0; const sched = () => { if (!sq) sq = requestAnimationFrame(() => { sq = 0; onScroll2(); }); };
+addEventListener('scroll', sched, { passive: true }); addEventListener('resize', sched); onScroll2();
 top2.addEventListener('click', () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
 
 /* re-run the visual extras whenever the language changes */
