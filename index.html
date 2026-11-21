@@ -518,8 +518,8 @@ header.top{backdrop-filter:none!important;-webkit-backdrop-filter:none!important
 .hero h1 .w>span{transform:none!important}
 .hero h1 em path{stroke-dashoffset:0!important}
 .hero h1 em{background:none!important;color:var(--accent)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important}
-.btn,.btn-primary{box-shadow:none!important}
-.marquee *,.mq{animation:none!important}
+.price.feat{animation:spin 4s linear infinite!important}
+.marquee .track{animation:mq 38s linear infinite!important}
 </style>
 </head>
 <body>
@@ -1036,15 +1036,13 @@ const hoverables = () => document.querySelectorAll('a,button,.pbtn,summary,.devi
   if (el.dataset.hov) return; el.dataset.hov = 1;
   el.addEventListener('mouseenter', () => c.classList.add('big')); el.addEventListener('mouseleave', () => c.classList.remove('big'));
 });
-if (false) {
+if (fine) {
   document.body.classList.add('has-cursor');
   let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
-  addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; d.style.transform = `translate(${x}px,${y}px)`; });
   document.querySelectorAll('.vp').forEach(vp => {   // live sites inside the screens swallow the mouse: hide our cursor there
     vp.addEventListener('mouseenter', () => document.body.classList.add('cur-off'));
     vp.addEventListener('mouseleave', () => document.body.classList.remove('cur-off'));
   });
-  (function loop() { cx += (x - cx) * 0.18; cy += (y - cy) * 0.18; c.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); })();
   document.querySelectorAll('.magnet').forEach(b => {
     b.addEventListener('mousemove', e => { const r = b.getBoundingClientRect();
       b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.25}px,${(e.clientY - r.top - r.height / 2) * 0.35}px)`; });
