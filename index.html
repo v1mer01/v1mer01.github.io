@@ -8,7 +8,7 @@
 <meta name="description" content="V1MER — веб-студія з Дніпра. Сайти для барбершопів, салонів краси та малого бізнесу: швидкі, анімовані, з онлайн-записом.">
 <script>
 (function(){var d=document.documentElement;try{var th=localStorage.getItem('v1mer-theme');if(th==='light'||th==='dark')d.setAttribute('data-theme',th);}catch(e){}
-try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!sessionStorage.getItem('v1mer-intro')){d.classList.add('intro');}}catch(e){}})();
+try{if(false&&!sessionStorage.getItem('v1mer-intro')){d.classList.add('intro');}}catch(e){}})();
 </script>
 <style>
 @font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/jetbrains-mono-v24-cyrillic_latin-600.woff2') format('woff2')}
@@ -505,6 +505,21 @@ h3,.price .sum.txt,.bento .big{overflow-wrap:break-word;hyphens:auto;-webkit-hyp
   .sw>span{transform:none;transition:none}
   .tilt-card.tilt-on{transform:none!important}
 }
+
+/* ===== LITE MODE: lighter animations for weak PCs (prices/content unchanged) ===== */
+*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}
+.aurora,.cursor,.cursor-dot,.intro-ov{display:none!important}
+header.top{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--bg)!important}
+*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;will-change:auto!important}
+.builder,.builder:hover{transform:none!important}
+.tilt-card,.tilt-card.tilt-on{transform:none!important}
+.rv.pre{transform:none!important;opacity:1!important}
+.sw>span{transform:none!important;transition:none!important}
+.hero h1 .w>span{transform:none!important}
+.hero h1 em path{stroke-dashoffset:0!important}
+.hero h1 em{background:none!important;color:var(--accent)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important}
+.btn,.btn-primary{box-shadow:none!important}
+.marquee *,.mq{animation:none!important}
 </style>
 </head>
 <body>
@@ -710,7 +725,7 @@ const CONFIG = {
   },
 };
 
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduce = true; // lite mode
 // phones: a finger "hovers" whatever it touched while scrolling and the effect sticks, so drop hover styles there
 if (matchMedia('(hover: none)').matches) {
   for (const sh of document.styleSheets) { let rules; try { rules = sh.cssRules; } catch (e) { continue; }
@@ -1021,7 +1036,7 @@ const hoverables = () => document.querySelectorAll('a,button,.pbtn,summary,.devi
   if (el.dataset.hov) return; el.dataset.hov = 1;
   el.addEventListener('mouseenter', () => c.classList.add('big')); el.addEventListener('mouseleave', () => c.classList.remove('big'));
 });
-if (fine) {
+if (false) {
   document.body.classList.add('has-cursor');
   let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
   addEventListener('mousemove', e => { x = e.clientX; y = e.clientY; d.style.transform = `translate(${x}px,${y}px)`; });
@@ -1174,7 +1189,7 @@ const P = [
   { slug: 'lezo', name: 'Лезо', type: 'barber', place: ['концепт бренду', 'brand concept', 'Markenkonzept'], bg: '#eef0eb', fg: '#14211e', ac: '#9a6f22', ink: '#ffffff', font: '"Alumni Sans",sans-serif', w: 800, cs: 'uppercase', st: 'normal', size: '6.6cqw',
     h1: 'Стрижка, після якої не треба укладки', p: 'Три майстри, гоління небезпечною бритвою і кава, поки чекаєте. Щодня з 9:00 до 21:00.', btn: 'Записатися', tags: ['prices', 'masters', 'reviews', 'booking'] },
 ];
-const LIVE = window.self === window.top && /^https?:$/.test(location.protocol);   // on your own site: real pages inside the frames
+const LIVE = false; // lite: static previews instead of heavy live iframes   // on your own site: real pages inside the frames
 const PRICES = ['від 450 ₴', 'від 350 ₴', 'від 600 ₴', 'від 300 ₴'];
 const UKT = { services: 'Послуги', team: 'Команда', booking: 'Онлайн-запис', map: 'Карта', two: '2 локації', podo: 'Подологія', faq: 'FAQ', prices: 'Прайс', reviews: 'Відгуки', combos: 'Комплекси', learn: 'Навчання', makeup: 'Макіяж', brows: 'Брови', masters: 'Майстри' };
 const poster = p => `
